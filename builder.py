@@ -1,39 +1,69 @@
-from bingo import card_generator, printing_card
+from __future__ import print_function
+from mailmerge import MailMerge
+from datetime import date
 import os
+from bingo import card_generator, printing_card
 
-file="BingoSentences.txt"
+file="english_shit.txt"
 
-if os.path.exists("bingo.docx"):
-  os.remove("bingo.docx")
-  print("bingo.docx removed")
-else:
-  print("The file does not exist")
+bingo_card=card_generator(file)
 
-document = Document()
+bingo_dict ={
+    "aa": 'hello',
+    "ab": 'empty',
+    "ac": 'empty',
+    "ad": 'empty',
+    "04": 'empty',
+    "11": 'empty',
+    "11": 'empty',
+    "12": 'empty',
+    "13": 'empty',
+    "14": 'empty',
+    "20": 'empty',
+    "21": 'empty',
+    "22": 'empty',
+    "23": 'empty',
+    "24": 'empty',
+    "30": 'empty',
+    "31": 'empty',
+    "32": 'empty',
+    "33": 'empty',
+    "34": 'empty',
+    "40": 'empty',
+    "41": 'empty',
+    "42": 'empty',
+    "43": 'empty',
+    "44": 'empty',
+}
 
-document.add_heading('Bingo PolyVoile', 0)
 
-p = document.add_paragraph("Bingo pour l'équipe d'entrainement de PolyVoile.")
-p.add_run('bold').bold = True
-p.add_run(' and some ')
-p.add_run('italic.').italic = True
+with open(file) as f:
+    lines = f.readlines()
+    print(len(lines))
+    j=0
+    for i in range(0, len(lines)):
+        if (i %2 == 0):
+            lines[j] = lines[i].strip()
+            if(i==0):
+                lines[j] = lines[j][2:]
+            j+=1
+    nb_lines=j
+    template = "bingo_template.docx"
+    document = MailMerge(template)
+    bingo_dict.update({"aa":"fuck"})
+    print(document.get_merge_fields())
+    document.merge_pages([bingo_dict])
+    document.write("bingo.docx")
+        
+
+# for i in range(5):
+#     for j in range(5):
+#         bingo_dict.update({str(i)+str(j):bingo_card[i][j]})
+# #bingo_dict.update({"00":bingo_card[0][0]})
+# template = "bingo_template.docx"
+# document = MailMerge(template)
+# document.merge(
+#     aa=lines[j]
+# )
 
 
-records = (
-    (3, '101', 'Spam'),
-    (7, '422', 'Eggs'),
-    (4, '631', 'Spam, spam, eggs, and spam')
-)
-table = document.add_table(rows=0, cols=5)
-card= card_generator(file)
-
-for row in card:
-    row_cells = table.add_row().cells
-    print(card[0][0])
-    a=card[0][0]
-    row_cells[0].text = a
-# for i in range(3):
-#     row_cells = table.add_row().cells
-#     print(card[i][0])
-#     row_cells[i].txt = records[i][1]
-document.save('bingo.docx')

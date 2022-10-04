@@ -32,4 +32,4 @@ def card_generator(file):
 def printing_card(bingoCard):
     for i in range(5):
         for j in range(5):
-            print(bingoCard[i][j], end=", ")
+            print(bingoCard[i][j], end=" | ")
